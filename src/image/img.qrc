@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>bg.jpg</file>
+        <file>bird1.png</file>
+        <file>bird2.png</file>
+        <file>bird3.png</file>
+        <file>bird4.png</file>
+        <file>bird5.png</file>
+        <file>bird56.png</file>
+        <file>GROUND.png</file>
+        <file>tool.png</file>
+        <file>obj1.png</file>
+        <file>obj2.png</file>
+        <file>obj3.png</file>
+        <file>exit.png</file>
+        <file>restart.png</file>
+        <file>bg2.jpg</file>
+        <file>target1.png</file>
+        <file>target2.png</file>
+    </qresource>
+</RCC>
