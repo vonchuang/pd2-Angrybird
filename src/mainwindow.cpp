@@ -220,7 +220,7 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 
     //bird mode
     if(birdMode==1 && birdNumber==2 && key->key()==0x5a){
-        world->SetGravity(b2Vec2(0.0f, -100.0f));
+        world->SetGravity(b2Vec2(0.0f, -50.0f));
         checkMouse=0;
         qDebug()<<"bird2"<<endl;
         birdMode=0;
