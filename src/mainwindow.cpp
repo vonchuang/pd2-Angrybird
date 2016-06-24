@@ -75,7 +75,11 @@ void MainWindow::showEvent(QShowEvent *)
     //score
     score=new Score();
     this->scene->addItem(score);
-
+    //dot
+    for(int i=0;i<15;++i){
+        dots[i]=new QGraphicsPixmapItem();
+        scene->addItem(dots[i]);
+    }
     // Create world
     world = new b2World(b2Vec2(0.0f, -9.8f));
 
@@ -116,10 +120,11 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
     if(event->type() == QEvent::MouseButtonPress)
     {
         // TODO : add your code here
-        checkMouse=1;
-        x1=mouse->pos().x();
-        y1=mouse->pos().y();
-        //std::cout << "Press !" << std::endl ;
+        if(ScreenMode==0){
+            checkMouse=1;
+            x1=mouse->pos().x();
+            y1=mouse->pos().y();
+        }    //std::cout << "Press !" << std::endl ;
     }
     if(event->type() == QEvent::MouseMove)
     {
@@ -129,11 +134,22 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
             y3=mouse->pos().y();
             xb=x1-x3;
             yb=y3-y1;
+            vx=xb/1.8;
+            vy=yb/1.8;
             if(xb>30) xb=30;
             if(yb>30) yb=30;
             if(xb<-30) xb=-30;
             if(yb<-30) yb=-30;
             birdtmp->setPos(205-xb,360+yb);
+
+            for(int i=0;i<15;++i){
+                xd=210+vx*(i*0.5);
+                yd=400-vy*(i*0.5)+0.5*9.8*(i*0.5)*(i*0.5);
+                dot.load(":/img/sen.png");
+                dot=dot.scaled(10,10);
+                dots[i]->setPixmap(dot);
+                dots[i]->setPos(xd,yd);
+            }
         }else if(checkMouse==0 && ScreenMode==0){
             birdtmp->setPos(205,360);
         }
@@ -153,7 +169,6 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
                         y2=mouse->pos().y();
                         x=x1-x2;
                         y=y2-y1;
-               //         qDebug()<<x<<" x "<<y<<endl;
                         vx=x/10.0;
                         vy=y/10.0;
                     //bird mode
@@ -274,30 +289,34 @@ void MainWindow::QUITSLOT()
 
 void MainWindow::birdHit(){
    // qDebug()<<"hit"<<endl;
+
     if(birdNumber>0 && ScreenMode==0){
         //target1
+        ck=0;
         if(target1->hit==0){
             xt1=bird->mappedPoint.x()-target1->mappedPoint.x();
             yt1=bird->mappedPoint.y()-target1->mappedPoint.y();
             if(xt1>-20 && xt1<20 && yt1>-15 && yt1<15){
                 score->increase();
                 target1->hit=1;
+                ck=1;
             }
             if(checkBird23==1){
                 if(xt1>-20 && xt1<20 && yt1>-15 && yt1<15){
                     score->increase();
                     target1->hit=1;
+                    ck=1;
                 }
                 if(xt1>-20 && xt1<20 && yt1>-15 && yt1<15){
                     score->increase();
                     target1->hit=1;
+                    ck=1;
                 }
             }
 
             if(target1->mappedPoint.y()>400){
                 score->increase();
                 target1->hit=1;
-                qDebug()<<"hit"<<endl;
             }
         }
         //target2
@@ -307,22 +326,24 @@ void MainWindow::birdHit(){
             if(xt2>-20 && xt2<20 && yt2>-15 && yt2<15){
                 score->increase();
                 target2->hit=1;
+                ck=1;
             }
             if(checkBird23==1){
                 if(xt2>-20 && xt2<20 && yt2>-15 && yt2<15){
                     score->increase();
                     target2->hit=1;
+                    ck=1;
                 }
                 if(xt2>-20 && xt2<20 && yt2>-15 && yt2<15){
                     score->increase();
                     target2->hit=1;
+                    ck=1;
                 }
             }
 
             if(target2->mappedPoint.y()>400){
                 score->increase();
                 target2->hit=1;
-                qDebug()<<"hit"<<endl;
             }
         }
         //target3
@@ -333,17 +354,20 @@ void MainWindow::birdHit(){
                 score->increase();
                 score->increase();
                 target3->hit=1;
+                ck=1;
             }
             if(checkBird23==1){
                 if(xt3>-20 && xt3<20 && yt3>-15 && yt3<15){
                     score->increase();
                     score->increase();
                     target3->hit=1;
+                    ck=1;
                 }
                 if(xt3>-20 && xt3<20 && yt3>-15 && yt3<15){
                     score->increase();
                     score->increase();
                     target3->hit=1;
+                    ck=1;
                 }
             }
         }
@@ -355,21 +379,47 @@ void MainWindow::birdHit(){
                 score->increase();
                 score->increase();
                 target4->hit=1;
+                ck=1;
             }
             if(checkBird23==1){
                 if(xt4>-20 && xt4<20 && yt4>-15 && yt4<15){
                     score->increase();
                     score->increase();
                     target4->hit=1;
+                    ck=1;
                 }
                 if(xt4>-20 && xt4<20 && yt4>-15 && yt4<15){
                     score->increase();
                     score->increase();
                     target4->hit=1;
+                    ck=1;
                 }
             }
         }
-
+        if(ck==1){
+            for(int i=0;i<3;++i){
+                vx=i*3/1.0;
+                vy=i*3/1.0;
+                if(birdNumber==1) win = new Bird(bird->mappedPoint.x()/30.0f,18.0f-bird->mappedPoint.y()/30.0f,0.1f,&timer,QPixmap(":/img/win1.png").scaled(20,20),world,scene);
+                if(birdNumber==2) win = new Bird(bird->mappedPoint.x()/30.0f,18.0f-bird->mappedPoint.y()/30.0f,0.1f,&timer,QPixmap(":/img/win2.png").scaled(20,20),world,scene);
+                if(birdNumber==3) win = new Bird(bird->mappedPoint.x()/30.0f,18.0f-bird->mappedPoint.y()/30.0f,0.1f,&timer,QPixmap(":/img/win3.png").scaled(20,20),world,scene);
+                if(birdNumber==4) win = new Bird(bird->mappedPoint.x()/30.0f,18.0f-bird->mappedPoint.y()/30.0f,0.1f,&timer,QPixmap(":/img/win4.png").scaled(20,20),world,scene);
+                win->fixturedef.density=1.0;
+                win->setLinearVelocity(b2Vec2(vx,vy));
+            }
+            for(int i=0;i<3;++i){
+                vx=-i*3/1.0;
+                vy=-i*3/1.0;
+                if(birdNumber==1) win = new Bird(bird->mappedPoint.x()/30.0f,18.0f-bird->mappedPoint.y()/30.0f,0.1f,&timer,QPixmap(":/img/win1.png").scaled(20,20),world,scene);
+                if(birdNumber==2) win = new Bird(bird->mappedPoint.x()/30.0f,18.0f-bird->mappedPoint.y()/30.0f,0.1f,&timer,QPixmap(":/img/win2.png").scaled(20,20),world,scene);
+                if(birdNumber==3) win = new Bird(bird->mappedPoint.x()/30.0f,18.0f-bird->mappedPoint.y()/30.0f,0.1f,&timer,QPixmap(":/img/win3.png").scaled(20,20),world,scene);
+                if(birdNumber==4) win = new Bird(bird->mappedPoint.x()/30.0f,18.0f-bird->mappedPoint.y()/30.0f,0.1f,&timer,QPixmap(":/img/win4.png").scaled(20,20),world,scene);
+                win->fixturedef.density=1.0;
+                win->setLinearVelocity(b2Vec2(vx,vy));
+            }
+            qDebug()<<"hit"<<endl;
+        }
+        ck=0;
     }
 }
 //tbc
@@ -446,6 +496,7 @@ void MainWindow::endPage(){
     ui->graphicsView->scene()->setBackgroundBrush(bg2);
     scene->removeItem(birdtmp);
     scene->removeItem(tool);
+    for(int i=0;i<15;++i){ scene->removeItem(dots[i]); delete dots[i];}
     score->setPos(450,250);
     score->setScale(5);
  //   qDebug()<<"endPage"<<endl;

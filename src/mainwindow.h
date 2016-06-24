@@ -37,11 +37,14 @@ public:
     int xt1,xt2,xt3,xt4,yt1,yt2,yt3,yt4;
     int checkMouse;
     int birdMode;
+    int ck;
+    float xt,yt,xd,yd;
     Land *land1;
     Land *land2;
     Bird *bird;
     Bird *bird2;
     Bird *bird3;
+    Bird *win;
     Score *score;
     Target *target1;
     Target *target2;
@@ -55,6 +58,8 @@ public:
     int checkBird23;
     float vx,vy;
     QPixmap birtmp;
+    QPixmap dot;
+    QGraphicsPixmapItem *dots[15];
     QGraphicsPixmapItem *birdtmp;
     QGraphicsPixmapItem *tool;
     QGraphicsPixmapItem *restart;
