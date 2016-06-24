@@ -17,5 +17,10 @@
         <file>bg2.jpg</file>
         <file>target1.png</file>
         <file>target2.png</file>
+        <file>sen.png</file>
+        <file>win1.png</file>
+        <file>win2.png</file>
+        <file>win3.png</file>
+        <file>win4.png</file>
     </qresource>
 </RCC>
